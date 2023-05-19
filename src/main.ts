@@ -10,7 +10,7 @@ function mapArch(arch: string): string {
   return mappings[arch] || arch
 }
 
-function getDownloadObject(version: string) {
+function getDownloadObject(version: string): string {
   core.info(os.arch())
   core.info(mapArch(os.arch()))
   const filename = `op_linux_${mapArch(os.arch())}_v${version}.zip`
@@ -20,7 +20,7 @@ function getDownloadObject(version: string) {
   return url
 }
 
-async function setup() {
+export default async function setup(): Promise<void> {
   try {
     // Get version of tool to be installed
     const version = core.getInput('version')
@@ -47,8 +47,4 @@ async function setup() {
   }
 }
 
-module.exports = setup
-
-if (require.main === module) {
-  setup()
-}
+setup()
