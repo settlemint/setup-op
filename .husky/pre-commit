@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+pnpm ncc build index.js -o dist --source-map --license licenses.txt
+git add .
