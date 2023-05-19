@@ -4,7 +4,6 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /***/ 2279:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const path = __nccwpck_require__(1017);
 const core = __nccwpck_require__(7733);
 const tc = __nccwpck_require__(514);
 const { getDownloadObject } = __nccwpck_require__(6548);
@@ -23,7 +22,10 @@ async function setup() {
     const pathToCLI = await extract(pathToTarball);
 
     // Expose the tool by adding it to the PATH
-    core.addPath(path.join(pathToCLI, download.binPath));
+    core.addPath(pathToCLI);
+
+    // Expose the service account to the environment
+    core.exportVariable('OP_SERVICE_ACCOUNT_TOKEN', core.getInput('service-account-token'));
   } catch (e) {
     core.setFailed(e);
   }
@@ -42,13 +44,12 @@ if (require.main === require.cache[eval('__filename')]) {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const os = __nccwpck_require__(2037);
-const path = __nccwpck_require__(1017);
 
 // arch in [arm, x32, x64...] (https://nodejs.org/api/os.html#os_os_arch)
 // return value in [amd64, 386, arm]
 function mapArch(arch) {
   const mappings = {
-    x32: '386',
+    arm: 'arm64',
     x64: 'amd64'
   };
   return mappings[arch] || arch;
@@ -57,23 +58,16 @@ function mapArch(arch) {
 // os in [darwin, linux, win32...] (https://nodejs.org/api/os.html#os_os_platform)
 // return value in [darwin, linux, windows]
 function mapOS(os) {
-  const mappings = {
-    darwin: 'macOS',
-    win32: 'windows'
-  };
-  return mappings[os] || os;
+  if(os !== 'linux'){
+    throw new Error(`Unsupported OS: ${os}`);
+  }
+  return os;
 }
 
 function getDownloadObject(version) {
   const platform = os.platform();
-  const filename = `gh_${ version }_${ mapOS(platform) }_${ mapArch(os.arch()) }`;
-  const extension = platform === 'win32' ? 'zip' : 'tar.gz';
-  const binPath = platform === 'win32' ? 'bin' : path.join(filename, 'bin');
-  const url = `https://github.com/cli/cli/releases/download/v${ version }/${ filename }.${ extension }`;
-  return {
-    url,
-    binPath
-  };
+  const filename = `op_${ mapOS(platform) }_${ mapArch(os.arch()) }_v${ version }.zip`;
+  return `https://cache.agilebits.com/dist/1P/op2/pkg/v${ version }/${ filename }`;
 }
 
 module.exports = { getDownloadObject }
