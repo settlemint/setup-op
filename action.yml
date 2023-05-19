@@ -1,5 +1,8 @@
 name: setup-op
 description: Setup the 1Password CLI, op, on GitHub Actions runners
+branding:
+  icon: unlock
+  color: blue
 inputs:
   version:
     description: Version of the 1Password CLI to install
