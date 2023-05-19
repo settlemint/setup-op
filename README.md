@@ -21,7 +21,7 @@ Setup the `op` CLI:
 
 ```yaml
 steps:
-- uses: settlemint/setup-op@v1
+- uses: settlemint/setup-op@v1.0.0
   with:
     service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 ```
@@ -30,7 +30,7 @@ A specific version of the `op` CLI can be installed:
 
 ```yaml
 steps:
-- uses: settlemint/setup-op@v1
+- uses: settlemint/setup-op@v1.0.0
   with:
     version: 2.18.0
     service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
