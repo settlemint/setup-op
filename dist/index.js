@@ -6,6 +6,29 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,13 +38,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(7733));
-const tool_cache_1 = __importDefault(__nccwpck_require__(514));
-const os_1 = __importDefault(__nccwpck_require__(2037));
+const core = __importStar(__nccwpck_require__(7733));
+const tc = __importStar(__nccwpck_require__(514));
+const os = __importStar(__nccwpck_require__(2037));
 function mapArch(arch) {
     const mappings = {
         arm: 'arm64',
@@ -30,33 +50,34 @@ function mapArch(arch) {
     return mappings[arch] || arch;
 }
 function getDownloadObject(version) {
-    core_1.default.info(os_1.default.arch());
-    core_1.default.info(mapArch(os_1.default.arch()));
-    const filename = `op_linux_${mapArch(os_1.default.arch())}_v${version}.zip`;
-    core_1.default.info(filename);
+    core.info(os.arch());
+    core.info(mapArch(os.arch()));
+    const filename = `op_linux_${mapArch(os.arch())}_v${version}.zip`;
+    core.info(filename);
     const url = `https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/${filename}`;
-    core_1.default.info(url);
+    core.info(url);
     return url;
 }
 function setup() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // Get version of tool to be installed
-            const version = core_1.default.getInput('version');
+            const version = core.getInput('version');
             // Download the specific version of the tool, e.g. as a tarball/zipball
             const download = getDownloadObject(version);
-            core_1.default.info(`Downloading ${download}`);
-            const pathToTarball = yield tool_cache_1.default.downloadTool(download);
+            core.info(`Downloading ${download}`);
+            const pathToTarball = yield tc.downloadTool(download);
             // Extract the tarball/zipball onto host runner
-            const extract = download.endsWith('.zip') ? tool_cache_1.default.extractZip : tool_cache_1.default.extractTar;
+            const extract = download.endsWith('.zip') ? tc.extractZip : tc.extractTar;
             const pathToCLI = yield extract(pathToTarball);
             // Expose the tool by adding it to the PATH
-            core_1.default.addPath(pathToCLI);
+            core.addPath(pathToCLI);
             // Expose the service account to the environment
-            core_1.default.exportVariable('OP_SERVICE_ACCOUNT_TOKEN', core_1.default.getInput('service-account-token'));
+            core.exportVariable('OP_SERVICE_ACCOUNT_TOKEN', core.getInput('service-account-token'));
         }
         catch (e) {
-            core_1.default.setFailed(e);
+            console.log(e);
+            core.setFailed(e);
         }
     });
 }

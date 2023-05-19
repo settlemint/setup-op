@@ -1,6 +1,6 @@
-import core from '@actions/core'
-import tc from '@actions/tool-cache'
-import os from 'os'
+import * as core from '@actions/core'
+import * as tc from '@actions/tool-cache'
+import * as os from 'os'
 
 function mapArch(arch: string): string {
   const mappings: Record<string, string> = {
@@ -43,6 +43,7 @@ export default async function setup(): Promise<void> {
       core.getInput('service-account-token')
     )
   } catch (e) {
+    console.log(e)
     core.setFailed(e as Error)
   }
 }
