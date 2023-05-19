@@ -1,0 +1,45 @@
+name: Tests
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    name: Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        version: [2.18.0]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup op
+      uses: ./
+      with:
+        version: ${{ matrix.version }}
+
+    - name: Capture gh version installed
+      run: |
+        export OP_VERSION=$( op --version )
+        echo 'OP_VERSION_INSTALLED<<EOF' >> $GITHUB_ENV
+        op --version >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
+
+    - name: Verify
+      shell: python
+      env:
+        OP_VERSION_EXPECTED: ${{ matrix.version }}
+      run: |
+        import sys, os
+        sys.exit(
+            int(not os.environ["OP_VERSION_EXPECTED"] in os.environ["OP_VERSION_INSTALLED"])
+        )
