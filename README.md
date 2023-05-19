@@ -1,4 +1,4 @@
-# :gear: `setup-op` ![](https://github.com/settlemint/setup-op/workflows/Tests/badge.svg)
+# :gear: `setup-op`
 
 ## About
 This action sets up the 1Password CLI, [`op`](https://1password.com/downloads/command-line/), on GitHub Actions runners.
