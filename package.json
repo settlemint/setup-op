@@ -27,7 +27,7 @@
   "devDependencies": {
     "husky": "9.1.7",
     "@types/node": "22.15.32",
-    "@typescript-eslint/parser": "8.34.1",
+    "@typescript-eslint/parser": "8.35.0",
     "@vercel/ncc": "0.38.3",
     "eslint": "9.29.0",
     "eslint-plugin-github": "6.0.0",
