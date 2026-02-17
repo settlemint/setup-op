@@ -21,7 +21,7 @@
     "url": "git+https://github.com/settlemint/setup-op.git"
   },
   "dependencies": {
-    "@actions/core": "1.11.1",
+    "@actions/core": "3.0.0",
     "@actions/tool-cache": "2.0.2"
   },
   "devDependencies": {
